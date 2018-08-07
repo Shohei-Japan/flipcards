@@ -37,110 +37,22 @@
 
     <table id="field"></table>
 
-    <script>
-        // var game = io('http://localhost:3000');
-        // var fortune = io('http://localhost:3000/fortune');
-        var socket = io.connect();
-        
-        // 相手がカードをめくった場合
-        socket.on("server_to_client", function(data){
-            openCard(data.value)
+    <script type="text/javascript">
+        var socket = io.connect(); // ソケットへの接続
+    
+        // server_to_clientイベント・データを受信する
+        socket.on("server_to_client", function(data){appendMsg(data.value)});
+    
+        function appendMsg(text) {
+            $("#chatLogs").append("<div>" + text + "</div>");
+        }
+    
+        $("form").submit(function(e){
+            var message = $("#msgForm").val();
+            $("#msgForm").val('');
+            socket.emit("client_to_server", {value : message});
+            e.preventDefault();
         });
-        function openCard(card){
-            click(card);
-        }
-
-
-        
-        const cards = [];
-        const marks = ['s', 'c', 'h', 'd']; // スペード、クローバー、ハート、ダイヤ
-        var flipedCard;
-        var td;
-
-        function init(){
-            for(let i = 0; i < marks.length; i++){
-                for(let j = 1; j < 14; j++){ // s01 〜 d13まで生成
-                    var card = {
-                        mark: marks[i] + ("0" + j).slice(-2),
-                        number: j,
-                        open: false
-                    }
-                    cards.push(card); // 連想配列
-                }
-            }
-            socket.emit("client_to_server_shuffle", {value : cards});
-            // shuffle();
-            var field = document.getElementById("field");
-            socket.emit("client_to_server_draw",{value : field});
-            // draw();
-        }
-        
-        // // 生成したカードをシャッフル
-        // function shuffle(){
-        //     for(var i = cards.length - 1; i > 0; i--){
-        //         var r = Math.floor(Math.random() * (i + 1));
-        //         var tmp = cards[i];
-        //         cards[i] = cards[r];
-        //         cards[r] = tmp;
-        //     }
-        //     console.log(cards);
-        // }
-
-        // // DOMに書き出す
-        // function draw(){
-        //     var field = document.getElementById("field");
-        //     field.innerHTML = "";
-        //     for (var i = 0; i < 4; i++){
-        //         var tr = document.createElement("tr");
-        //         for (var j = 0; j < 13; j++){
-        //             td = document.createElement("td");
-        //             var index = i * 13 + j;
-        //             var id = cards[index].mark; // シャッフルした配列から指定する
-        //             td.className = "card close";
-        //             td.id = id;
-        //             var src = 'trump/png/'+id+'.png';
-        //             td.index = src;
-        //             // td.style.backgroundImage = "url( trump/png/.png )";
-        //             td.textContent = id;
-        //             td.number = cards[index].number;
-        //             td.onclick = click;
-        //             tr.appendChild(td);
-        //         }
-        //         field.appendChild(tr);
-        //     }
-        // }
-
-        function click(e){
-            let firstCard = e.srcElement;
-            console.log(firstCard);
-            let num = firstCard.number
-            firstCard.className = 'card open';
-            
-            if(flipedCard == null){
-                flipedCard = firstCard;
-                firstCard.style.backgroundImage = "url(" + firstCard.index + ")";
-                socket.emit("client_to_server", {value : flipedCard.number});
-                return;
-            }
-            // console.log(flipedCard.id, e.srcElement.id);
-            // 同じカードを２回クリックしても反応しない
-            if(flipedCard.id == e.srcElement.id){
-                return;
-            }
-            if(flipedCard.number == num){ // ２枚のカードの数字が同じ場合
-                // console.log(e.srcElement);
-                e.srcElement.style.backgroundImage = "url(" + e.srcElement.index + ")";
-                socket.emit("client_to_server", {value : num});
-                flipedCard = null;
-            } else {
-                e.srcElement.style.backgroundImage = "url(" + e.srcElement.index + ")";
-                setTimeout(function () {
-                    firstCard.style.backgroundImage = "url(trump/png/z01.png)";
-                    flipedCard.style.backgroundImage = "url(trump/png/z01.png)";
-                    flipedCard = null;
-                }, 1000);
-            }
-        }
     </script>
 </body>
 </html>
