@@ -23,7 +23,8 @@
         }
     </style>
 </head>
-<body onload="init()">
+<body>
+    <!-- <button onclick="init">スタート</button> -->
     <!-- カード生成
         HTML
             id名：c01 クローバの１
@@ -34,25 +35,62 @@
             open: false 裏向き
     生成したカードを配列に入れる
     シャッフルする -->
-
     <table id="field"></table>
+    
 
     <script type="text/javascript">
         var socket = io.connect(); // ソケットへの接続
     
-        // server_to_clientイベント・データを受信する
-        socket.on("server_to_client", function(data){appendMsg(data.value)});
+        // // server_to_clientイベント・データを受信する
+        // socket.on("server_to_client", function(data){appendMsg(data.value)});
     
-        function appendMsg(text) {
-            $("#chatLogs").append("<div>" + text + "</div>");
-        }
+        // function appendMsg(text) {
+        //     $("#chatLogs").append("<div>" + text + "</div>");
+        // }
     
-        $("form").submit(function(e){
-            var message = $("#msgForm").val();
-            $("#msgForm").val('');
-            socket.emit("client_to_server", {value : message});
-            e.preventDefault();
+        // $("form").submit(function(e){
+        //     var message = $("#msgForm").val();
+        //     $("#msgForm").val('');
+        //     socket.emit("client_to_server", {value : message});
+        //     e.preventDefault();
+        // });
+        
+        $("#field").ready(function(e){
+            socket.emit("client_to_server_onload");
         });
+
+        socket.on("server_to_client_draw", function(data){
+            draw(data.value);
+        });
+
+        // DOMに書き出す
+        function draw(cards){
+            console.log("drawまできました");
+            var field = document.getElementById("field");
+            field.innerHTML = "";
+            for (var i = 0; i < 4; i++){
+                var tr = document.createElement("tr");
+                for (var j = 0; j < 13; j++){
+                    td = document.createElement("td");
+                    var index = i * 13 + j;
+                    var id = cards[index].mark; // シャッフルした配列から指定する
+                    td.className = "card close";
+                    td.id = id;
+                    var src = 'trump/png/'+id+'.png';
+                    td.index = src;
+                    // td.style.backgroundImage = "url( trump/png/.png )";
+                    td.textContent = id;
+                    td.number = cards[index].number;
+                    // td.onclick = click;
+                    tr.appendChild(td);
+                }
+                field.appendChild(tr);
+            }
+            console.log("draw終わりました");
+            console.log(field);
+        }
+
+
     </script>
 </body>
 </html>
