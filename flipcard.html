@@ -39,6 +39,8 @@
     
 
     <script type="text/javascript">
+        var td;
+
         var socket = io.connect(); // ソケットへの接続
     
         // // server_to_clientイベント・データを受信する
@@ -56,10 +58,12 @@
         // });
         
         $("#field").ready(function(e){
+            console.log("ready");
             socket.emit("client_to_server_onload");
         });
 
         socket.on("server_to_client_draw", function(data){
+            console.log("サーバーからdrawへ");
             draw(data.value);
         });
 
@@ -73,10 +77,12 @@
                 for (var j = 0; j < 13; j++){
                     td = document.createElement("td");
                     var index = i * 13 + j;
+                    // console.log(cards[index]);
                     var id = cards[index].mark; // シャッフルした配列から指定する
                     td.className = "card close";
                     td.id = id;
                     var src = 'trump/png/'+id+'.png';
+                    // console.log(src);
                     td.index = src;
                     // td.style.backgroundImage = "url( trump/png/.png )";
                     td.textContent = id;
@@ -89,7 +95,6 @@
             console.log("draw終わりました");
             console.log(field);
         }
-
 
     </script>
 </body>
