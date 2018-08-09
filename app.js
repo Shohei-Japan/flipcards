@@ -2,21 +2,40 @@
 var http = require('http');
 var socketio = require('socket.io');
 var fs = require('fs');
-// var indexPage = fs.readFileSync('./flipcard.html', 'utf-8');
-// var nextPage = fs.readFileSync('./next.html', 'utf-8');
 
-fs.readFile("trump/png/z01.png",function(err,data){
-    if(err) {
-        throw err
-    };
-    console.log(data) ;
-}) ;
+function getType(_url) {
+    var types = {
+        ".html": "text/html",
+        ".css": "text/css",
+        ".js": "text/javascript",
+        ".png": "image/png",
+        ".gif": "image/gif",
+        ".svg": "svg+xml"
+    }
+    for (var key in types) {
+        if (_url.endsWith(key)) {
+            return types[key];
+        }
+    }
+    return "text/plain";
+}
 
-// HTTPサーバを生成する
-var server = http.createServer(function(req, res) {
-    res.writeHead(200, {'Content-Type' : 'text/html'});
-    res.end(fs.readFileSync(__dirname + '/flipcard.html', 'utf-8'));
-}).listen(3000);  // ポート競合の場合は値を変更
+// HTTPサーバにソケットをひもづける（WebSocket有効化）
+var io = socketio.listen(server);
+
+var server = http.createServer(function (req, res){
+    var url = "public" + req.url;
+    console.log(url);
+    if(fs.existsSync(url)){
+        fs.readFile(url, (err, data) =>{
+            if (!err){
+                res.writeHead(200, {"Content-Type": getType(url)});
+                res.end(data);
+            }
+        });
+    }
+}).listen(3000);
+console.log("サーバーに繋がりましたよ！");
 
 //  HTTPサーバにソケットを紐付ける（WebSocket有効化）
 var io = socketio.listen(server);

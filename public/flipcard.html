@@ -20,7 +20,7 @@
         }
         .close {
             /* background-color: red; */
-            background-image: url("./trump/png/z01.png");
+            background-image: url("png/z01.png");
         }
     </style>
 </head>
@@ -46,21 +46,7 @@
         console.log(field);
 
         var socket = io.connect(); // ソケットへの接続
-    
-        // // server_to_clientイベント・データを受信する
-        // socket.on("server_to_client", function(data){appendMsg(data.value)});
-    
-        // function appendMsg(text) {
-        //     $("#chatLogs").append("<div>" + text + "</div>");
-        // }
-    
-        // $("form").submit(function(e){
-        //     var message = $("#msgForm").val();
-        //     $("#msgForm").val('');
-        //     socket.emit("client_to_server", {value : message});
-        //     e.preventDefault();
-        // });
-        
+            
         $("#field").ready(function(e){
             console.log("ready");
             // console.log(field);
@@ -88,11 +74,11 @@
                     var id = cards[index].mark; // シャッフルした配列から指定する
                     td.className = "card close";
                     td.id = id;
-                    var src = 'trump/png/'+id+'.png';
+                    var src = 'png/'+id+'.png';
                     // console.log(src);
                     td.index = src;
-                    td.style.backgroundImage = "url( ./trump/png/z01.png )";
-                    td.textContent = id;
+                    td.style.backgroundImage = "url( png/z01.png )";
+                    // td.textContent = id;
                     td.number = cards[index].number;
                     // td.onclick = click;
                     tr.appendChild(td);
