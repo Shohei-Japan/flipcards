@@ -18,7 +18,7 @@ var server = http.createServer(function(req, res) {
 //  HTTPサーバにソケットを紐付ける（WebSocket有効化）
 var io = socketio.listen(server);
  
-const cards = [];
+var cards = [];
 const marks = ['s', 'c', 'h', 'd']; // スペード、クローバー、ハート、ダイヤ
 var flipedCard;
 
@@ -28,6 +28,7 @@ io.sockets.on('connection', function(socket) {
     // client_to_serverイベント・データを受信する
     socket.on('client_to_server_onload', function() {
         console.log("readyした");
+        cards = [];
         for(let i = 0; i < marks.length; i++){
             for(let j = 1; j < 14; j++){ // s01 〜 d13まで生成
                 var card = {
@@ -36,36 +37,39 @@ io.sockets.on('connection', function(socket) {
                     open: false
                 }
                 cards.push(card); // 連想配列
-                console.log("cardsにpushしたよ"+i+"回目");
+                // console.log("cardsにpushしたよ"+i+"回目");
                 // console.log(card);
                 // console.log(cards);
             }
             console.log("cardsに全部pushしたよ"+i+"回目");
             // console.log(cards);
         }
+        // console.log(cards);
         console.log("shuffleに送るよ")
-        shuffle();
+        shuffle(cards);
     });
     // console.log(cards);
     // server_to_clientイベント・データを送信する
-    console.log("cards情報送るよ");
-    io.sockets.emit('server_to_client_draw', {value : cards});
-    console.log("cards情報送った！");
 });
 
 
 
 // 生成したカードをシャッフル
-function shuffle(){
-    // console.log(cards);
+function shuffle(cards){
+    console.log("shuffleです。cards受け取りました。")
+    console.log(cards.length);
     console.log("shuffleするよ")
-    for(var i = cards.length - 1; i > 0; i--){
+    // console.log(cards);
+    for(var i = cards.length - 1; i >= 0; i--){
         var r = Math.floor(Math.random() * (i + 1));
         var tmp = cards[i];
         cards[i] = cards[r];
         cards[r] = tmp;
     }
-    console.log(cards);
+    // console.log(cards);
+    console.log("cards情報送るよ");
+    io.sockets.emit('server_to_client_draw', {value : cards});
+    console.log("cards情報送った！");
 }
 
 
