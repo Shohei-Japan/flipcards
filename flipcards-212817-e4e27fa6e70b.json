@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "flipcards-212817",
+  "private_key_id": "e4e27fa6e70b9c18e70b6b19f5a66b4bf07defb6",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDajk8xdjRUsij9\nkbWXPzHPdEiQPMkh5pLU6jMGblr1kltpa/D5+NBp4LJMv0BBuK4JLrgOr7kwoBWt\nHjOl6SlWIm+qkXuYUi3/bi0ptfCRUg7hCfIaUbtZPsaZl1DBbDSlcBkRRXkT968d\n0l2Gho6V69K6J2eo/RKzKG+bb4K2B6E/2y2UKu6CQ7m1FdDjsK9nq59wasHWqgsl\nDtWu8Y4egXOH26YGoiuKrrgl8pzUtdOZ/dkqcFj0MidfvJuAc04C9dQmDq4A9Xei\nasMt70wA+HXHGKSUHuMUegkUZJiC279dZa990rXLDpTWkMqJZHuMfGyul0hfusap\n3wdrwgzLAgMBAAECggEAWxaIpwKu2MXQE66Q0lKCPgYm4AaVhU2F0LszPPDtc//l\nnVBhhK1Qn3AIn7ft3fZMgoM4LtbKBhwSLK6zs+gzVDTR+XLc4iUOCrEunX24n7hl\nfyEYCCQcQxvIxeasv5CLeI/5wpsD1XCbSYCNfi3Ca3V3xCH8MBAZpRWrPksBXT+X\npn5IPZZVsyZhYam+cR2+t5CREgtY0hhmfo+H9VUSMeEYv+b/YkvlyPP9gC51hteo\n2dAJLNlj9JhhyNet8N8N1CUpFbiNFK7/NhtTJUxJydoqHfT2ZTqVDHYpNWA3vg8Y\nvXbutOflhx3AeDsitfN7iRhx7A8Mqso2e1ONoCWwwQKBgQDuVYyvgn881tnjCDaT\nSvXE2YSYRl/ZqXyJjCFQXi3azKHtm04/mlX7zERdv4GhoJXdtqlz28z57uYztoK8\nL4KeQxO29B5n3ymw8lEs7mSmt0LcpYDe6lXHUG6+vb32Cv0Q8Y1OQ9FWDAYRJsJi\nQPesrnTfo3inZdiirTC9zUXNcQKBgQDqwXZDLG7fj+UjUrK9NEr5DTZpYdLewMOh\nD6h/NxyX8XlzbqBDo5VPUjPupwlv0pVrWVIn4++/1qy/S3zNom8YlDK+TL9N+X5c\nQyr9Pvc+agt85nE/d1o6uQK+6vKdwrq4k2ZyP5+KO0gZ6Lg98lPdA6to75fKGqQt\nMfQkIcgP+wKBgQCrDJUCpXqh9GS+Dvf0MDlBBQenreI+uegaY4rJPj5UqMaSXAMF\nnMOXClwKmFX15OWKEP1+nEJ5Id7vQE6FtudcpDFy/bMQw1YNm2ts/s8X47DF4LYj\nxjS37l783/qEqhBD58iNYhjMU6bLCnE5yPy4XyCcHJuMMIkQ/5Fatwcg0QKBgGf/\nRo3hnEiL7Z2lYCtzhBcq5ETxIkKuMLwkPKgG2TLytbQOeQ8d4+Jc70a1Vvfj2W/S\nBRRI5QgeaS7hmStb302LMaOeSk2XzoO++cdw4oUS4330dI0CKcXD+lRrrwl2n9Nu\n8T6BswLA2mMn9p7ywHYzzvbQ1XSiMsMW0ypCkOeLAoGAFdTYmu57eq/R3MWvV/xd\nEEJTF9VVAagwlMmZkPx/KDUr7nNf6W6ODjyOqcie6SLDxOI1g58mrMJINUwaYpoL\nxh2Ad0E0sDYQ3Urt81MTw5pLKqFNSU6GhB0LiyIC+FZzEBrDJDgxbkpoDZZYZ3+W\nYzbBqqz3J3wVonzkgkU2X9s=\n-----END PRIVATE KEY-----\n",
+  "client_email": "flipcard-mild-257@flipcards-212817.iam.gserviceaccount.com",
+  "client_id": "116853631538218790161",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/flipcard-mild-257%40flipcards-212817.iam.gserviceaccount.com"
+}

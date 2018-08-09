@@ -2,6 +2,9 @@
 var http = require('http');
 var socketio = require('socket.io');
 var fs = require('fs');
+// var indexPage = fs.readFileSync('./flipcard.html', 'utf-8');
+// var nextPage = fs.readFileSync('./next.html', 'utf-8');
+
 fs.readFile("trump/png/z01.png",function(err,data){
     if(err) {
         throw err

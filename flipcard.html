@@ -20,7 +20,7 @@
         }
         .close {
             /* background-color: red; */
-            background-image: url("trump/png/z01.png");
+            background-image: url("./trump/png/z01.png");
         }
     </style>
 </head>
@@ -36,8 +36,8 @@
             open: false 裏向き
     生成したカードを配列に入れる
     シャッフルする -->
-    <table id="field">a</table>
-    <p id="sample">sjsjs</p>
+    <table id="field"></table>
+    <p id="sample"></p>
     
 
     <script type="text/javascript">
@@ -63,13 +63,13 @@
         
         $("#field").ready(function(e){
             console.log("ready");
-            console.log(field);
+            // console.log(field);
             socket.emit("client_to_server_onload", {value: field});
         });
 
         socket.on("server_to_client_draw", function(data){
             console.log("サーバーからdrawへ");
-            console.log(data.value);
+            // console.log(data.value);
             draw(data.value);
         });
 
@@ -91,7 +91,7 @@
                     var src = 'trump/png/'+id+'.png';
                     // console.log(src);
                     td.index = src;
-                    td.style.backgroundImage = "url( ./trump/png/.png )";
+                    td.style.backgroundImage = "url( ./trump/png/z01.png )";
                     td.textContent = id;
                     td.number = cards[index].number;
                     // td.onclick = click;
