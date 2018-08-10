@@ -68,12 +68,10 @@ io.sockets.on('connection', function(socket) {
     // clickを受け取る
     socket.on('client_to_server_click', function(srcJSON){
         console.log("click情報受け取った");
-        var srcParse = JSON.parse(srcJSON);
+        var firstCard = JSON.parse(srcJSON);
         // var src = JSON.parse(srcJSON);
         // console.log('srcは'+src);
         // console.log("srcParse.indexは" + srcParse.index);
-        var firstCard = src.value;
-        console.log('firstCardは'+firstCard);
         var num = firstCard.number; // 2
         console.log('numは'+num);
         firstCard.className = 'card open';
@@ -83,7 +81,8 @@ io.sockets.on('connection', function(socket) {
             console.log('1');
             flipedCard = firstCard;
             firstCard.backgroundImage = "url(" + firstCard.index + ")";
-            console.log("flipedCardは"+flipedCard);
+            console.log('flipedCardは');
+            console.log(flipedCard);
             return;
         }
         // console.log(flipedCard.id, e.srcElement.id);
