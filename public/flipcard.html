@@ -33,11 +33,24 @@
             open: false 裏向き
     生成したカードを配列に入れる
     シャッフルする -->
+    <div class="container">
+        <form class="form-inline">
+            <div class="form-group">
+                <label for="msgForm">名前：</label>
+                <input type="text" id="msgForm">
+            </div>
+            <button type="submit" id="sendButton">入室</button>
+        </form>
+        <div id="chatLogs"></div>
+    </div>
+
     <table id="field"></table>
-    <p id="sample"></p>
     
 
     <script type="text/javascript">
+        var isEnter = false;
+        var name = '';
+
         var td;
         var field = document.getElementById("field");
         // console.log(field);
@@ -85,7 +98,7 @@
         }
 
         function click(e){
-            console.log(e);
+            // console.log(e);
             // console.log(e.srcElement.className);
             var src = {
                 "className": e.srcElement.className,
@@ -94,24 +107,36 @@
                 "id": e.srcElement.id,
                 "number": e.srcElement.number
             };
-            console.log(src);
+            // console.log(src);
             var srcJSON = JSON.stringify(src);
-            console.log(srcJSON);
+            // console.log(srcJSON);
             socket.json.emit("client_to_server_click", srcJSON);
         }
 
 
-        socket.on('server_to_client_firstCard', function(firstCard){
-            console.log(firstCard);
-            var id = firstCard.id;
+        socket.on('server_to_client_clickedCard', function(clickedCard){
+            // console.log(clickedCard);
+            let id = clickedCard.id;
             // console.log(id);
-            var card = document.getElementById(id);
-            // console.log(card);
-            card.style.backgroundImage = firstCard.backgroundImage;
+            let card = document.getElementById(id);
+            card.style.backgroundImage = clickedCard.backgroundImage;
+            console.log(card);
         });
 
-        socket.on('server_to_client_sameCard')
+        socket.on('server_to_client_flipedCard', function(flipedCard){
+            // console.log(flipedCard);
+            let id = flipedCard.id;
+            // console.log(id);
+            let card = document.getElementById(id);
+            card.style.backgroundImage = flipedCard.backgroundImage;
+            console.log(card);
+        });
 
+        function changeLabel() {    
+            $("label").text("メッセージ：");
+            $("button").text("送信");
+            isEnter = true;
+        }
     </script>
 </body>
 </html>

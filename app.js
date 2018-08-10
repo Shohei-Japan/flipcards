@@ -24,7 +24,7 @@ function getType(_url) {
 
 var server = http.createServer(function (req, res){
     var url = "public" + req.url;
-    console.log(url);
+    // console.log(url);
     if (fs.existsSync(url)){
         fs.readFile(url, (err, data) =>{
             if (!err){
@@ -70,82 +70,75 @@ io.sockets.on('connection', function(socket) {
     // clickを受け取る
     socket.on('client_to_server_click', function(srcJSON){
         console.log("click情報受け取った");
-        var firstCard = JSON.parse(srcJSON);
+        var clickedCard = JSON.parse(srcJSON);
         // var src = JSON.parse(srcJSON);
         // console.log('srcは'+src);
         // console.log("srcParse.indexは" + srcParse.index);
-        var num = firstCard.number; // 1枚目にかかれている数字
+        var num = clickedCard.number; // 1枚目にかかれている数字
         // console.log('numは'+num);
-        // console.log("indexは" + firstCard.index);
-        firstCard.className = 'card'; // 1枚目のクラスからbackを取る
+        // console.log("indexは" + clickedCard.index);
+        clickedCard.className = 'card'; // 1枚目のクラスからbackを取る
 
         console.log('1');
         console.log(flipedCard);
+
         if(flipedCard == null){
             console.log('2');
-            flipedCard = firstCard;
+            flipedCard = clickedCard;
             console.log('3');
             console.log(flipedCard);
             console.log('4');
-            console.log(firstCard);
-            firstCard.backgroundImage = "url(" + firstCard.index + ")"; // 1枚目のbgを変更
-            socket.emit('server_to_client_firstCard',firstCard); // 変更したあとの情報をおくる
-            console.log('firstCard情報送ったよ');
+            console.log(clickedCard);
+            clickedCard.backgroundImage = "url(" + clickedCard.index + ")"; // 1枚目のbgを変更
+            socket.emit('server_to_client_clickedCard',clickedCard); // 変更したあとの情報をおくる
+            console.log('clickedCard情報送ったよ');
             return;
         }
 
-        // console.log(flipedCard.id, e.srcElement.id);
+        // console.log(flipedCard.id, clickedCard.id);
         console.log("flipedCard.idは");
         console.log(flipedCard.id);
-        console.log("firstCard.idは");
-        console.log(firstCard.id);
+        console.log("clickedCard.idは");
+        console.log(clickedCard.id);
         
-        if (flipedCard.id == firstCard.id){
+        if (flipedCard.id == clickedCard.id){
             return;
         } 
         
         if(flipedCard.number == num){ // ２枚のカードの数字が同じ場合
             console.log('4');
-            flipedCard.backgroundImage = "url(" + e.srcElement.index + ")";
+            clickedCard.backgroundImage = "url(" + clickedCard.index + ")";
+            socket.emit('server_to_client_clickedCard', clickedCard); // 変更したあとの情報をおくる
             // socket.emit('server_to_client_sameCard', flipedCard); // 変更したあとの情報をおくる
             flipedCard = null;
         } else { // カードの数字が違う場合
-            console.log('5');
-            e.srcElement.style.backgroundImage = "url(" + e.srcElement.index + ")";
+            // console.log('5');
+            // console.log(clickedCard.index);
+            clickedCard.backgroundImage = "url(" + clickedCard.index + ")";
+            // console.log('6');
+            // console.log(clickedCard.backgroundImage);
+            // console.log('7');
+            socket.emit('server_to_client_clickedCard',clickedCard); // 変更したあとの情報をおくる
             setTimeout(function () {
-                firstCard.style.backgroundImage = "url(trump/png/z01.png)";
-                flipedCard.style.backgroundImage = "url(trump/png/z01.png)";
+                console.log('8');
+                clickedCard.backgroundImage = "url(png/z01.png)";
+                console.log(clickedCard.backgroundImage);
+                console.log('9');
+                flipedCard.backgroundImage = "url(png/z01.png)";
+                console.log(flipedCard.backgroundImage);
+                socket.emit('server_to_client_clickedCard',clickedCard); // 変更したあとの情報をおくる
+                socket.emit('server_to_client_flipedCard',flipedCard); // 変更したあとの情報をおくる
                 flipedCard = null;
             }, 1000);
         }
-
-
-        // // 同じカードを２回クリックしても反応しない
-        // if(flipedCard.id == firstCard.id){
-        //     return;
-        // }
-        // if(flipedCard.number == num){ // ２枚のカードの数字が同じ場合
-        //     console.log('3');
-        //     flipedCard.backgroundImage = "url(" + e.srcElement.index + ")";
-        //     // socket.emit('server_to_client_sameCard', flipedCard); // 変更したあとの情報をおくる
-        //     flipedCard = null;
-        // } else { // カードの数字が違う場合
-        //     console.log('4');
-        //     e.srcElement.style.backgroundImage = "url(" + e.srcElement.index + ")";
-        //     setTimeout(function () {
-        //         firstCard.style.backgroundImage = "url(trump/png/z01.png)";
-        //         flipedCard.style.backgroundImage = "url(trump/png/z01.png)";
-        //         flipedCard = null;
-        //     }, 1000);
-        // }
     });
 });
 
 // 生成したカードをシャッフル
 function shuffle(cards){
-    console.log("shuffleです。cards受け取りました。");
+    // console.log("shuffleです。cards受け取りました。");
     // console.log(cards.length);
-    console.log("shuffleするよ");
+    // console.log("shuffleするよ");
     // console.log(cards);
     for(var i = cards.length - 1; i >= 0; i--){
         var r = Math.floor(Math.random() * (i + 1));
@@ -154,7 +147,7 @@ function shuffle(cards){
         cards[r] = tmp;
     }
     // console.log(cards);
-    console.log("cards情報送るよ");
+    // console.log("cards情報送るよ");
     io.sockets.emit('server_to_client_draw', {value : cards});
-    console.log("cards情報送った！");
+    // console.log("cards情報送った！");
 }
