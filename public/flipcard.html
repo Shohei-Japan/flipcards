@@ -15,10 +15,7 @@
             /* border: 1px solid #aaa; */
             cursor: pointer;
         }
-        .open {
-            /* background-color: #eee; */
-        }
-        .close {
+        .back {
             /* background-color: red; */
             background-image: url("png/z01.png");
         }
@@ -29,8 +26,8 @@
     <!-- カード生成
         HTML
             id名：c01 クローバの１
-            クラス名：card close
-                開いたら card open
+            クラス名：'card back'
+                開いたら 'card'
         データ
             number: c01
             open: false 裏向き
@@ -71,7 +68,7 @@
                     var index = i * 13 + j;
                     // console.log(cards[index]);
                     var id = cards[index].mark; // シャッフルした配列から指定する
-                    td.className = "card close";
+                    td.className = "card back";
                     td.id = id;
                     var src = 'png/'+id+'.png';
                     // console.log(src);
@@ -102,6 +99,18 @@
             console.log(srcJSON);
             socket.json.emit("client_to_server_click", srcJSON);
         }
+
+
+        socket.on('server_to_client_firstCard', function(firstCard){
+            console.log(firstCard);
+            var id = firstCard.id;
+            // console.log(id);
+            var card = document.getElementById(id);
+            // console.log(card);
+            card.style.backgroundImage = firstCard.backgroundImage;
+        });
+
+        socket.on('server_to_client_sameCard')
 
     </script>
 </body>
