@@ -51,25 +51,29 @@ io.sockets.on('connection', function(socket) {
     // roomへの入室は、「socket.join(room名)」
     socket.on('client_to_server_join', function(data) {
         room = data.value;
+        // console.log('部屋は');
+        // console.log(room);
         socket.join(room);
     });
 
     // メッセージ
     socket.on('client_to_server_message', function(data) {
-        io.to(room).emit('server_to_client', {value : data.value});
+        io.to(room).emit('server_to_client_message', {value : data.value});
     });
 
     // 入室情報
     socket.on('client_to_server_broadcast', function(data) {
-        socket.broadcast.to(room).emit('server_to_client', {value : data.value});
+        socket.broadcast.to(room).emit('server_to_client_message', {value : data.value});
     });
 
     // 自分のみに送信
     socket.on('client_to_server_personal', function(data) {
         var id = socket.id;
+        console.log('idは・・・');
+        console.log(id);
         name = data.value;
-        var personalMessage = "あなたは、" + name + "さんとして入室しました。"
-        io.to(id).emit('server_to_client', {value : personalMessage});
+        var joinMessage = "あなたは、" + name + "さんとして" + room + "に入室しました。"
+        io.to(id).emit('server_to_client_joinMessage', {value : joinMessage});
     });
 
     // 退出情報
@@ -78,7 +82,7 @@ io.sockets.on('connection', function(socket) {
             console.log("未入室のまま、どこかへ去っていきました。");
         } else {
             var endMessage = name + "さんが退出しました。"
-            io.to(room).emit('server_to_client', {value : endMessage});
+            io.to(room).emit('server_to_client_message', {value : endMessage});
         }
     });
 
@@ -113,7 +117,7 @@ io.sockets.on('connection', function(socket) {
         // console.log("srcParse.indexは" + srcParse.index);
         var num = clickedCard.number; // 1枚目にかかれている数字
         // console.log('numは'+num);
-        // console.log("indexは" + clickedCard.index);
+        console.log("indexは" + clickedCard.index);
         clickedCard.className = 'card'; // 1枚目のクラスからbackを取る
 
         console.log('1');
@@ -138,7 +142,7 @@ io.sockets.on('connection', function(socket) {
         // console.log("clickedCard.idは");
         // console.log(clickedCard.id);
         
-        if (flipedCard.id == clickedCard.id){
+        if (flipedCard.id == clickedCard.id){ // 同じカードはクリックできない
             return;
         } 
         
