@@ -45,6 +45,40 @@ var flipedCard;
 
 // connectionイベント・データを受信する
 io.sockets.on('connection', function(socket) {
+    var room = '';
+    var name = '';
+
+    // roomへの入室は、「socket.join(room名)」
+    socket.on('client_to_server_join', function(data) {
+        room = data.value;
+        socket.join(room);
+    });
+    // S05. client_to_serverイベント・データを受信する
+    socket.on('client_to_server', function(data) {
+        // S06. server_to_clientイベント・データを送信する
+        io.to(room).emit('server_to_client', {value : data.value});
+    });
+    // S07. client_to_server_broadcastイベント・データを受信し、送信元以外に送信する
+    socket.on('client_to_server_broadcast', function(data) {
+        socket.broadcast.to(room).emit('server_to_client', {value : data.value});
+    });
+    // S08. client_to_server_personalイベント・データを受信し、送信元のみに送信する
+    socket.on('client_to_server_personal', function(data) {
+        var id = socket.id;
+        name = data.value;
+        var personalMessage = "あなたは、" + name + "さんとして入室しました。"
+        io.to(id).emit('server_to_client', {value : personalMessage});
+    });
+    // S09. dicconnectイベントを受信し、退出メッセージを送信する
+    socket.on('disconnect', function() {
+        if (name == '') {
+            console.log("未入室のまま、どこかへ去っていきました。");
+        } else {
+            var endMessage = name + "さんが退出しました。"
+            io.to(room).emit('server_to_client', {value : endMessage});
+        }
+    });
+
     // console.log("connectionした");
     // client_to_serverイベント・データを受信する
     socket.on('client_to_server_onload', function() {
@@ -90,16 +124,16 @@ io.sockets.on('connection', function(socket) {
             console.log('4');
             console.log(clickedCard);
             clickedCard.backgroundImage = "url(" + clickedCard.index + ")"; // 1枚目のbgを変更
-            socket.emit('server_to_client_clickedCard',clickedCard); // 変更したあとの情報をおくる
+            io.to(room).emit('server_to_client_clickedCard',clickedCard); // 変更したあとの情報をおくる
             console.log('clickedCard情報送ったよ');
             return;
         }
 
         // console.log(flipedCard.id, clickedCard.id);
-        console.log("flipedCard.idは");
-        console.log(flipedCard.id);
-        console.log("clickedCard.idは");
-        console.log(clickedCard.id);
+        // console.log("flipedCard.idは");
+        // console.log(flipedCard.id);
+        // console.log("clickedCard.idは");
+        // console.log(clickedCard.id);
         
         if (flipedCard.id == clickedCard.id){
             return;
@@ -108,7 +142,7 @@ io.sockets.on('connection', function(socket) {
         if(flipedCard.number == num){ // ２枚のカードの数字が同じ場合
             console.log('4');
             clickedCard.backgroundImage = "url(" + clickedCard.index + ")";
-            socket.emit('server_to_client_clickedCard', clickedCard); // 変更したあとの情報をおくる
+            io.to(room).emit('server_to_client_clickedCard', clickedCard); // 変更したあとの情報をおくる
             // socket.emit('server_to_client_sameCard', flipedCard); // 変更したあとの情報をおくる
             flipedCard = null;
         } else { // カードの数字が違う場合
@@ -118,7 +152,7 @@ io.sockets.on('connection', function(socket) {
             // console.log('6');
             // console.log(clickedCard.backgroundImage);
             // console.log('7');
-            socket.emit('server_to_client_clickedCard',clickedCard); // 変更したあとの情報をおくる
+            io.to(room).emit('server_to_client_clickedCard',clickedCard); // 変更したあとの情報をおくる
             setTimeout(function () {
                 console.log('8');
                 clickedCard.backgroundImage = "url(png/z01.png)";
@@ -126,8 +160,8 @@ io.sockets.on('connection', function(socket) {
                 console.log('9');
                 flipedCard.backgroundImage = "url(png/z01.png)";
                 console.log(flipedCard.backgroundImage);
-                socket.emit('server_to_client_clickedCard',clickedCard); // 変更したあとの情報をおくる
-                socket.emit('server_to_client_flipedCard',flipedCard); // 変更したあとの情報をおくる
+                io.to(room).emit('server_to_client_clickedCard',clickedCard); // 変更したあとの情報をおくる
+                io.to(room).emit('server_to_client_flipedCard',flipedCard); // 変更したあとの情報をおくる
                 flipedCard = null;
             }, 1000);
         }
