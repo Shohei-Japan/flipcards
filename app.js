@@ -51,12 +51,21 @@ io.sockets.on('connection', function(socket) {
 
     // roomへの入室は、「socket.join(room名)」
     socket.on('client_to_server_join', function(data) {
-        room.name = data.value;
+        // console.log('dataは');
+        // console.log(data);
+        // console.log('data.valueは');
+        // console.log(data.value);
+        console.log('roomsは');
+        console.log(rooms);
+
         if(isRoomExist(rooms)){
+            room.name = data.value;
+            console.log(room.name);
             socket.join(room.name);
             console.log("join");
         } else {
             rooms.push(room);
+            console.log(room);
             console.log("push");
         }
 
@@ -65,17 +74,21 @@ io.sockets.on('connection', function(socket) {
         // console.log(room.name);
         // socket.join(room);
         // rooms.push(room);
-        console.log('roomsは');
-        console.log(rooms);
+
+        // console.log('roomsは');
+        // console.log(rooms);
+        // console.log('roomsIndexは');
+        // console.log(roomsIndex);
+
         // console.log(io.sockets.adapter.sids[socket.id]); // 
     });
 
+    var r = [];
     function isRoomExist(a){
-        let r = [];
         console.log("isRoomExist");
         for(let v in a){
-            console.log('vは');
-            console.log(v);
+            // console.log('vは');
+            // console.log(v);
           if(a.hasOwnProperty(v))
             r.push(a[v]);
             console.log('vは');
@@ -92,6 +105,7 @@ io.sockets.on('connection', function(socket) {
 
     // メッセージ
     socket.on('client_to_server_message', function(data) {
+        console.log(room.name);
         io.to(room.name).emit('server_to_client_message', {value : data.value});
     });
 
