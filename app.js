@@ -52,23 +52,52 @@ io.sockets.on('connection', function(socket) {
     // roomへの入室は、「socket.join(room名)」
     socket.on('client_to_server_join', function(data) {
         room.name = data.value;
+        if(isRoomExist(rooms)){
+            socket.join(room.name);
+            console.log("join");
+        } else {
+            rooms.push(room);
+            console.log("push");
+        }
+
+
         // console.log('部屋は');
-        // console.log(room);
-        socket.join(room);
-        rooms.push(room);
+        // console.log(room.name);
+        // socket.join(room);
+        // rooms.push(room);
         console.log('roomsは');
         console.log(rooms);
         // console.log(io.sockets.adapter.sids[socket.id]); // 
     });
 
+    function isRoomExist(a){
+        let r = [];
+        console.log("isRoomExist");
+        for(let v in a){
+            console.log('vは');
+            console.log(v);
+          if(a.hasOwnProperty(v))
+            r.push(a[v]);
+            console.log('vは');
+            console.log(v);
+            console.log('rは');
+            console.log(r);
+            return true;
+        }
+        console.log("return");
+        console.log('rは');
+        console.log(r);
+        return false;
+      }
+
     // メッセージ
     socket.on('client_to_server_message', function(data) {
-        io.to(room).emit('server_to_client_message', {value : data.value});
+        io.to(room.name).emit('server_to_client_message', {value : data.value});
     });
 
     // 入室情報
     socket.on('client_to_server_broadcast', function(data) {
-        socket.broadcast.to(room).emit('server_to_client_message', {value : data.value});
+        socket.broadcast.to(room.name).emit('server_to_client_message', {value : data.value});
     });
 
     // 自分のみに送信
