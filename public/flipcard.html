@@ -12,11 +12,9 @@
         .card {
             height: 300px;
             width: 200px;
-            /* border: 1px solid #aaa; */
             cursor: pointer;
         }
         .back {
-            /* background-color: red; */
             background-image: url("png/z01.png");
         }
     </style>
@@ -54,8 +52,8 @@
         var isEnter = false;
         var name = '';
  
-        // C04. server_to_clientイベント・データを受信する
-        socket.on("server_to_client", function(data){appendMsg(data.value)});
+        // メッセージを送る
+        socket.on("server_to_client_message", function(data){appendMsg(data.value)});
         function appendMsg(text) {
             $("#chatLogs").append("<div>" + text + "</div>");
         }
