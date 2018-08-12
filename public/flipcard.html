@@ -68,8 +68,9 @@
 
         // サーバからのメッセージを受け取る
         socket.on("server_to_client_joinMessage", function(data){
+            console.log("joinMsg");
             joinMsg(data.value)
-        });        
+        });
         function joinMsg(text) {
             $("chatLogs").append("<div>" + text + "</div>");
             $(".roomLabel").remove();
@@ -79,7 +80,7 @@
             socket.emit("client_to_server_onload", {value: field});
         }
 
- 
+        // 送信ボタンを押したあとの挙動
         $("form").submit(function(e) {
             var message = $("#msgForm").val();
             var selectRoom = $("#rooms").val();

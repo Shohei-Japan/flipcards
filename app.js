@@ -42,18 +42,23 @@ var io = socketio.listen(server);
 var cards = [];
 const marks = ['s', 'c', 'h', 'd']; // スペード、クローバー、ハート、ダイヤ
 var flipedCard;
+var rooms = []; // name: 'heya1', cards:
 
 // connectionイベント・データを受信する
 io.sockets.on('connection', function(socket) {
-    var room = '';
+    var room = {};
     var name = '';
 
     // roomへの入室は、「socket.join(room名)」
     socket.on('client_to_server_join', function(data) {
-        room = data.value;
+        room.name = data.value;
         // console.log('部屋は');
         // console.log(room);
         socket.join(room);
+        rooms.push(room);
+        console.log('roomsは');
+        console.log(rooms);
+        // console.log(io.sockets.adapter.sids[socket.id]); // 
     });
 
     // メッセージ
@@ -67,10 +72,10 @@ io.sockets.on('connection', function(socket) {
     });
 
     // 自分のみに送信
-    socket.on('client_to_server_personal', function(data) {
+    socket.on('client_to_server_personalJoin', function(data) {
         var id = socket.id;
-        console.log('idは・・・');
-        console.log(id);
+        // console.log('idは・・・');
+        // console.log(id);
         name = data.value;
         var joinMessage = "あなたは、" + name + "さんとして" + room + "に入室しました。"
         io.to(id).emit('server_to_client_joinMessage', {value : joinMessage});
