@@ -33,10 +33,20 @@
 
     <form id="form-inline" class="center">
         <div class="form-group">
-            <label class="roomLabel" for="rooms">部屋名：</label>
-            <input type="text" id="rooms" required>
+            <label class="roomLabel" for="rooms">部屋：</label>
+            <select class="form-control" id="rooms">
+                <option value="0">部屋01</option>
+                <option value="1">部屋02</option>
+                <option value="2">部屋03</option>
+                <option value="3">部屋04</option>
+                <option value="4">部屋05</option>
+                <option value="5">部屋06</option>
+                <option value="6">部屋07</option>
+                <option value="7">部屋08</option>
+            </select>
             <label class="nameLabel" for="msgForm">名前：</label>
             <input type="text" class="form-control" id="msgForm" required>
+
         </div>
         <button type="submit" class="btn btn-primary" id="sendButton">入室</button>
     </form>
@@ -69,10 +79,10 @@
         // サーバからのメッセージを受け取る
         socket.on("server_to_client_joinMessage", function(data){
             console.log("joinMsg");
-            joinMsg(data.value)
+            joinMsg(data.value);
         });
         function joinMsg(text) {
-            $("chatLogs").append("<div>" + text + "</div>");
+            $("#chatLogs").append("<div>" + text + "</div>");
             $(".roomLabel").remove();
             $("#rooms").remove();
             $("#form-inline").removeClass("center");

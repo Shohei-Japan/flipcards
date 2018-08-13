@@ -2,8 +2,6 @@
 var http = require('http');
 var socketio = require('socket.io');
 var fs = require('fs');
-var flipedCard;
-
 
 function getType(_url) {
     var types = {
@@ -39,88 +37,41 @@ console.log("サーバーに繋がりましたよ！");
 //  HTTPサーバにソケットを紐付ける（WebSocket有効化）
 var io = socketio.listen(server);
 
-var cards = [];
 const marks = ['s', 'c', 'h', 'd']; // スペード、クローバー、ハート、ダイヤ
+var allCards = []; // rooms = [[cards],[cards],[cards]];
 var flipedCard;
-var rooms = []; // name: 'heya1', cards:
 
 // connectionイベント・データを受信する
 io.sockets.on('connection', function(socket) {
-    var room = {};
+    var room = '';
     var name = '';
 
     // roomへの入室は、「socket.join(room名)」
     socket.on('client_to_server_join', function(data) {
-        // console.log('dataは');
-        // console.log(data);
-        // console.log('data.valueは');
-        // console.log(data.value);
-        console.log('roomsは');
-        console.log(rooms);
-
-        if(isRoomExist(rooms)){
-            room.name = data.value;
-            console.log(room.name);
-            socket.join(room.name);
-            console.log("join");
-        } else {
-            rooms.push(room);
-            console.log(room);
-            console.log("push");
-        }
-
-
-        // console.log('部屋は');
-        // console.log(room.name);
-        // socket.join(room);
-        // rooms.push(room);
-
-        // console.log('roomsは');
-        // console.log(rooms);
-        // console.log('roomsIndexは');
-        // console.log(roomsIndex);
-
+        room = data.value;
+        socket.join(room);
         // console.log(io.sockets.adapter.sids[socket.id]); // 
     });
 
-    var r = [];
-    function isRoomExist(a){
-        console.log("isRoomExist");
-        for(let v in a){
-            // console.log('vは');
-            // console.log(v);
-          if(a.hasOwnProperty(v))
-            r.push(a[v]);
-            console.log('vは');
-            console.log(v);
-            console.log('rは');
-            console.log(r);
-            return true;
-        }
-        console.log("return");
-        console.log('rは');
-        console.log(r);
-        return false;
-      }
-
     // メッセージ
     socket.on('client_to_server_message', function(data) {
-        console.log(room.name);
-        io.to(room.name).emit('server_to_client_message', {value : data.value});
+        console.log(room);
+        io.to(room).emit('server_to_client_message', {value : data.value});
     });
 
     // 入室情報
     socket.on('client_to_server_broadcast', function(data) {
-        socket.broadcast.to(room.name).emit('server_to_client_message', {value : data.value});
+        socket.broadcast.to(room).emit('server_to_client_message', {value : data.value});
     });
 
     // 自分のみに送信
     socket.on('client_to_server_personalJoin', function(data) {
         var id = socket.id;
-        // console.log('idは・・・');
-        // console.log(id);
+        console.log('idは・・・');
+        console.log(id);
         name = data.value;
-        var joinMessage = "あなたは、" + name + "さんとして" + room + "に入室しました。"
+        console.log(name);
+        var joinMessage = "あなたは、" + name + "さんとして" + room + "に入室しました。";
         io.to(id).emit('server_to_client_joinMessage', {value : joinMessage});
     });
 
@@ -129,7 +80,7 @@ io.sockets.on('connection', function(socket) {
         if (name == '') {
             console.log("未入室のまま、どこかへ去っていきました。");
         } else {
-            var endMessage = name + "さんが退出しました。"
+            var endMessage = name + "さんが退出しました。";
             io.to(room).emit('server_to_client_message', {value : endMessage});
         }
     });
@@ -137,8 +88,18 @@ io.sockets.on('connection', function(socket) {
     // console.log("connectionした");
     // client_to_serverイベント・データを受信する
     socket.on('client_to_server_onload', function() {
-        // console.log("readyした");
+        console.log("1");
+        if(allCards[room] == undefined){ // allCards[room]がなければカード生成
+            console.log("2");
+            createCards();
+        } else {
+            
+        }
+    });
+
+    function createCards(){
         cards = [];
+        console.log("3");
         for(let i = 0; i < marks.length; i++){
             for(let j = 1; j < 14; j++){ // s01 〜 d13まで生成
                 var card = {
@@ -153,7 +114,8 @@ io.sockets.on('connection', function(socket) {
         }
         // console.log("shuffleに送るよ")
         shuffle(cards);
-    });
+    }
+        
     // server_to_clientイベント・データを送信する
 
     // clickを受け取る
