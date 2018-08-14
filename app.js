@@ -116,26 +116,6 @@ io.sockets.on('connection', function(socket) {
         shuffle(cards);
     }
         
-    function createCards(){
-        cards = [];
-        console.log("3");
-        for(let i = 0; i < marks.length; i++){
-            for(let j = 1; j < 14; j++){ // s01 〜 d13まで生成
-                var card = {
-                    mark: marks[i] + ("0" + j).slice(-2),
-                    number: j,
-                    open: false
-                }
-                cards.push(card); // 連想配列
-                // console.log("cardsにpushしたよ"+i+"回目");
-            }
-            // console.log("cardsに全部pushしたよ"+i+"回目");
-        }
-        // console.log("shuffleに送るよ")
-        shuffle(cards);
-    }
-      
-        
     // server_to_clientイベント・データを送信する
 
     // clickを受け取る
