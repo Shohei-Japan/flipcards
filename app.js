@@ -41,49 +41,7 @@ const marks = ['s', 'c', 'h', 'd']; // スペード、クローバー、ハー�
 var allCards = []; // rooms = [[cards],[cards],[cards]];
 var flipedCard;
 
-// connectionイベント・データを受信する
-io.sockets.on('connection', function(socket) {
-    var room = '';
-    var name = '';
 
-    // roomへの入室は、「socket.join(room名)」
-    socket.on('client_to_server_join', function(data) {
-        room = data.value;
-        socket.join(room);
-        // console.log(io.sockets.adapter.sids[socket.id]); // 
-    });
-
-    // メッセージ
-    socket.on('client_to_server_message', function(data) {
-        console.log(room);
-        io.to(room).emit('server_to_client_message', {value : data.value});
-    });
-
-    // 入室情報
-    socket.on('client_to_server_broadcast', function(data) {
-        socket.broadcast.to(room).emit('server_to_client_message', {value : data.value});
-    });
-
-    // 自分のみに送信
-    socket.on('client_to_server_personalJoin', function(data) {
-        var id = socket.id;
-        console.log('idは・・・');
-        console.log(id);
-        name = data.value;
-        console.log(name);
-        var joinMessage = "あなたは、" + name + "さんとして" + room + "に入室しました。";
-        io.to(id).emit('server_to_client_joinMessage', {value : joinMessage});
-    });
-
-    // 退出情報
-    socket.on('disconnect', function() {
-        if (name == '') {
-            console.log("未入室のまま、どこかへ去っていきました。");
-        } else {
-            var endMessage = name + "さんが退出しました。";
-            io.to(room).emit('server_to_client_message', {value : endMessage});
-        }
-    });
 
     // console.log("connectionした");
     // client_to_serverイベント・データを受信する
